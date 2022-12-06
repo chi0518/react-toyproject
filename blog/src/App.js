@@ -14,6 +14,7 @@ function App() {
     '2 니가사끼 우동'
   ]);
   let [like, setLike] = useState([0,0,0]);
+  let [unLike, setUnLike] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
 
   const titleHandle = () => {
@@ -30,8 +31,24 @@ function App() {
   
   const likeHandle = (props) => {
     const newLike = [...like];
-    newLike[props] = newLike[props] + 1;
-    setLike(newLike);
+    if (newLike[props] < 20){
+      newLike[props] = newLike[props] + 1;
+      setLike(newLike);
+    } else {
+      alert("좋아요가 꽉찼어여");
+      return false;
+    }
+  }
+
+  const unLikeHandle = (props) => {
+    const newUnLike = [...unLike];
+    if (newUnLike[props] < 20){
+      newUnLike[props] = newUnLike[props] + 1;
+      setUnLike(newUnLike);
+    } else {
+      alert("ㅜㅜ 분발하겠습니다.");
+      return false;
+    }
   }
 
   return (
@@ -46,17 +63,22 @@ function App() {
           return (
             <div className="list" key={number}>
               <h4 onClick={() => setModal(!modal)}> { text } </h4>
-              <span style={{textAlign: "right", fontSize:"14px"}} onClick={() => likeHandle(number)}>
-              좋아요 ❤️
-              {like[number]}
-              </span>  
-              <p>2월 17일 발행</p>
+              <p style={{fontSize:"12px"}}>2월 17일 발행</p>
+              <div style={{display:"flex",justifyContent: "space-between"}}>
+                <span className="likeBtn" onClick={() => likeHandle(number)}>
+                좋아요 ❤️
+                {like[number]}
+                </span>
+                <span className="likeBtn" onClick={() => unLikeHandle(number)}>
+                싫어요 😅
+                {unLike[number]}
+                </span> 
+              </div>
+              { modal == true ? <Modal /> : null }
             </div>
-            
           )
         })
       }
-      { modal == true ? <Modal /> : null }
       <Footer/>
     </div>
   );
