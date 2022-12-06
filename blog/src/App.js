@@ -13,7 +13,7 @@ function App() {
     '1 새우 우동',
     '2 니가사끼 우동'
   ]);
-  let [like, setLike] = useState(0);
+  let [like, setLike] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
 
   const titleHandle = () => {
@@ -23,9 +23,15 @@ function App() {
   }
 
   const sortHandle = () => {
-    const newTitle = [...title]
+    const newTitle = [...title];
     newTitle.sort();
     setTitle(newTitle);
+  }
+  
+  const likeHandle = (props) => {
+    const newLike = [...like];
+    newLike[props] = newLike[props] + 1;
+    setLike(newLike);
   }
 
   return (
@@ -35,18 +41,21 @@ function App() {
       </div>
       <button onClick={sortHandle}>가나다순 정렬</button>
       <button onClick={titleHandle}>타이틀 변경 버튼</button>
-      <div className="list">
-        <h4>{title[0]} <span onClick={() => setLike(like + 1) }>❤️</span> {like} </h4>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h4>{title[1]}</h4>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h4 onClick={()=> setModal(!modal)}>{title[2]}</h4>
-        <p>2월 17일 발행</p>
-      </div>
+      {
+        title.map(function(text, number){
+          return (
+            <div className="list" key={number}>
+              <h4 onClick={() => setModal(!modal)}> { text } </h4>
+              <span style={{textAlign: "right", fontSize:"14px"}} onClick={() => likeHandle(number)}>
+              좋아요 ❤️
+              {like[number]}
+              </span>  
+              <p>2월 17일 발행</p>
+            </div>
+            
+          )
+        })
+      }
       { modal == true ? <Modal /> : null }
       <Footer/>
     </div>
