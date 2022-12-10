@@ -3,6 +3,7 @@
 import './App.css';
 import { useState } from 'react';
 import Modal from './components/modal';
+import CreateModal from './components/createModal';
 import Footer from './components/footer';
 
 function App() {
@@ -15,7 +16,8 @@ function App() {
   ]);
   let [like, setLike] = useState([0,0,0]);
   let [unLike, setUnLike] = useState([0,0,0]);
-  let [modal, setModal] = useState(false);
+  let [modal, setModal] = useState([false,false,false]);
+  let [createModal, setCreateModal] = useState("");
 
   const titleHandle = () => {
     const newTitle = [...title]
@@ -51,6 +53,28 @@ function App() {
     }
   }
 
+  const modalHandle = (props) => {
+   const newModal = [...modal];
+   newModal[props] == false ? newModal[props] = true : newModal[props] = false; 
+   setModal(newModal);
+  }
+
+  const updateTitle = () => {
+    const newTitle = [...title]
+    newTitle[0] = '여자코드 추천';
+    setTitle(newTitle);
+  }
+
+  const create = () => {
+    const newTitle = [...title];
+    newTitle.push(createModal);
+    modal.push(false);
+    unLike.push(0);
+    like.push(0);
+    setTitle(newTitle);
+
+  }
+  console.log(title);
   return (
     <div className="App">
       <div className="black-nav">
@@ -62,7 +86,7 @@ function App() {
         title.map(function(text, number){
           return (
             <div className="list" key={number}>
-              <h4 onClick={() => setModal(!modal)}> { text } </h4>
+              <h4 onClick={() => modalHandle(number)}> { text } </h4>
               <p style={{fontSize:"12px"}}>2월 17일 발행</p>
               <div style={{display:"flex",justifyContent: "space-between"}}>
                 <span className="likeBtn" onClick={() => likeHandle(number)}>
@@ -74,11 +98,12 @@ function App() {
                 {unLike[number]}
                 </span> 
               </div>
-              { modal == true ? <Modal /> : null }
+              { modal[number] == true ? <Modal title={title[number]} updateTitle={updateTitle}/> : null }
             </div>
           )
         })
       }
+      <CreateModal create={create} createModal={setCreateModal}/>
       <Footer/>
     </div>
   );
