@@ -67,14 +67,19 @@ function App() {
 
   const create = () => {
     const newTitle = [...title];
-    newTitle.push(createModal);
+    newTitle.unshift(createModal);
     modal.push(false);
     unLike.push(0);
     like.push(0);
     setTitle(newTitle);
-
   }
-  console.log(title);
+
+  const deleteData = (props) => {
+    let newTitle = [...title];
+    newTitle.splice(props, 1);
+    setTitle(newTitle);
+  }
+  
   return (
     <div className="App">
       <div className="black-nav">
@@ -98,6 +103,7 @@ function App() {
                 {unLike[number]}
                 </span> 
               </div>
+              <button onClick={()=>deleteData(number)}>삭제하기</button>
               { modal[number] == true ? <Modal title={title[number]} updateTitle={updateTitle}/> : null }
             </div>
           )
